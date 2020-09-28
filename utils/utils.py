@@ -226,6 +226,7 @@ def draw_progress_bar(step=0, total_steps=100, length=30, percentage=False):
     return bar  
 
 ## --------------------------------------------------------------------------------------------------------------------------
+## --------------------------------------------------------------------------------------------------------------------------
 class Align(Enum):
     LEFT = 0
     CENTER = 1
@@ -243,7 +244,7 @@ class Sorting(Enum):
     
 def draw_text(canvas, string, org=(0,0), align=Align.LEFT, valign=Valign.TOP, inner_pad=0, outer_pad=[0,0],
               font_face=cv2.FONT_HERSHEY_PLAIN, font_size=2, font_color=(255, 255, 255), font_width=1, line_type=cv2.LINE_4,
-              outline=False, outline_color=(0, 0, 0), outline_width=2, darken_background=-1, sort=Sorting.NONE):
+              outline=False, outline_color=(0, 0, 0), outline_width=2, darken_background=-1, background_color=None, sort=Sorting.NONE):
     """
     A function for a more sophisticated and flexible text rendering. Using this instead of the standard cv2.putText() may result
     in a small performance loss.
@@ -300,10 +301,15 @@ def draw_text(canvas, string, org=(0,0), align=Align.LEFT, valign=Valign.TOP, in
     elif valign == Valign.BOTTOM:
         tl[1] = org[1] - max_height
         br[1] = org[1]
-
-    # if necessary, darken the background of the text by the specified value
-    if 0 <= darken_background <= 1:
-        canvas[tl[1]:br[1], tl[0]:br[0]] = np.clip(np.uint8(canvas[tl[1]:br[1], tl[0]:br[0]]) * darken_background, 0, 255)
+    
+    # if necessary, draw a background color
+    if background_color is not None and isinstance(background_color, tuple):
+        cv2.rectangle(canvas, (tl[0], tl[1]), (br[0], br[1]), background_color, outline_width)
+        cv2.rectangle(canvas, (tl[0], tl[1]), (br[0], br[1]), background_color, -1)
+    else:
+        # if necessary, darken the background of the text by the specified value
+        if 0 <= darken_background <= 1:
+            canvas[tl[1]:br[1], tl[0]:br[0]] = np.clip(np.uint8(canvas[tl[1]:br[1], tl[0]:br[0]]) * darken_background, 0, 255)
 
     # sort the text by width, if necessary:
     if sort == Sorting.NONE:
