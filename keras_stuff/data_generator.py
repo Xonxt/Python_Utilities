@@ -31,7 +31,7 @@ from keras.utils import (Sequence, to_categorical)
 
 #----------------------
 
-class DataGenerator(keras.utils.Sequence):
+class DataGenerator(Sequence):
     def __init__(self, data_x, labels, one_hot_encode=True,
                  batch_size=16, shuffle=True, input_size=(368,368), padding=False,
                  augment=True, probability=0.5, preprocessing=None, dataset_size=-1):
@@ -141,6 +141,6 @@ class DataGenerator(keras.utils.Sequence):
         """
 
         # shuffle the dataset, if necessary:
-        self.index_list = np.arange(len(self.data_x))[:self.dataset_image]
+        self.index_list = np.arange(len(self.data_x))
         if self.shuffle == True:
             np.random.shuffle(self.index_list)
