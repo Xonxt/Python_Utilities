@@ -122,8 +122,6 @@ class DataGenerator(keras.utils.Sequence):
                 augment_scale(image, max_chance=self.probability, max_range=0.2)
 
             # if provided some preprocessing function, use it on the image:
-            # Note to Azrin: usually, the images are fed into the model not in the
-            # pure form (in the 0..255 range), but actually normalized to [0..1] or [-1..+1]
             if self.preprocessing is not None and callable(self.preprocessing):
                 image = self.preprocessing(image)
 

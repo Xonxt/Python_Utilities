@@ -33,7 +33,6 @@ def augment_flip(image, max_chance=0.5, horizontal=True, vertical=False):
     if vertical:
         image[:] = cv2.flip(image, 0)
 
-
 # HORIZONTAL AND VERTICAL TRANSLATION
 def augment_translate(image, max_chance=0.5, max_range=0.1, borderValue=128):
     chance_x = np.random.rand()
