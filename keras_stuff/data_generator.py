@@ -25,12 +25,11 @@ import time, datetime
 import traceback
 #----------------------
 from utils.utils import *
-from keras_stuff.augmentations import *
+from utils.augmentations import *
 #----------------------
 from keras.utils import (Sequence, to_categorical)
 
 #----------------------
-
 class DataGenerator(Sequence):
     def __init__(self, data_x, labels, one_hot_encode=True,
                  batch_size=16, shuffle=True, input_size=(368,368), padding=False,
@@ -107,7 +106,8 @@ class DataGenerator(Sequence):
                 augment_contrast(image, max_chance=self.probability, max_range=0.2)
                 augment_brightness(image, max_chance=self.probability, max_range=30)
                 augment_gamma(image, max_chance=self.probability, max_range=(0.75, 2))
-                augment_colorize(image, max_chance=self.probability, max_rate=0.1)
+                augment_hsv(image, max_chance=self.probability, max_range=0.3, bgr_order=True)
+                augment_compress_artifacts(image, max_chance=0.5, max_range=0.4)
 
             # then, scale the image to the desired size AFTER the color augmentations:
             image, _ = resize_ratio(image, shape=self.input_size, padding=self.padding, pad_value=128)
@@ -115,7 +115,7 @@ class DataGenerator(Sequence):
             if self.augment:
                 # and now, do the  Affine transformations
                 # (so that color-transformations don't affect the padding value)
-                augment_flip(image, max_chance=self.probability, vertical=True)
+                augment_flip(image, max_chance=self.probability, horizontal=True, vertical=True)
                 augment_translate(image, max_chance=self.probability, max_range=[-0.1, 0.2])
                 augment_shear(image, max_chance=self.probability, max_range=0.2, horizontal=True, vertical=True)
                 augment_rotate(image, max_chance=self.probability, max_angle=45)
