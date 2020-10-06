@@ -301,11 +301,22 @@ def draw_text(canvas, string, org=(0,0), align=Align.LEFT, valign=Valign.TOP, in
     elif valign == Valign.BOTTOM:
         tl[1] = org[1] - max_height
         br[1] = org[1]
+        
     
+    if darken_background >= 0:
+        darken_background = np.clip(darken_background, 0, 1)
+        
     # if necessary, draw a background color
     if background_color is not None and isinstance(background_color, tuple):
-        cv2.rectangle(canvas, (tl[0], tl[1]), (br[0], br[1]), background_color, outline_width)
-        cv2.rectangle(canvas, (tl[0], tl[1]), (br[0], br[1]), background_color, -1)
+        
+        if darken_background < 0:
+            cv2.rectangle(canvas, (tl[0], tl[1]), (br[0], br[1]), background_color, outline_width)
+            cv2.rectangle(canvas, (tl[0], tl[1]), (br[0], br[1]), background_color, -1)
+        else:
+            overlay = np.zeros(canvas.shape, dtype=canvas.dtype)
+            cv2.rectangle(overlay, (tl[0], tl[1]), (br[0], br[1]), background_color, outline_width)
+            cv2.rectangle(overlay, (tl[0], tl[1]), (br[0], br[1]), background_color, -1)
+            canvas[:] = cv2.addWeighted(canvas, 1.0, overlay, darken_background, 1.0)
     else:
         # if necessary, darken the background of the text by the specified value
         if 0 <= darken_background <= 1:
