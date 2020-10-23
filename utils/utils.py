@@ -330,17 +330,20 @@ def draw_text(canvas, string, org=(0,0), align=Align.LEFT, valign=Valign.TOP, in
 
     # iterate through text lines and draw them:
     for i, (j, dim) in enumerate(dims_array):
-        dims = dim
         s = string[j]
-
-        pt = (outer_pad[0] + int(tl[0]), outer_pad[1] + int(tl[1]) + (i+1) * dims[1] + i * inner_pad)
+       
+        pt = [outer_pad[0] + int(tl[0]), outer_pad[1] + int(tl[1]) + (i+1) * dim[1] + i * inner_pad]
+        if align == Align.CENTER:
+            pt[0] = org[0] - dim[0] // 2
+        elif align == Align.RIGHT:
+            pt[0] = br[0] - dim[0]
 
         # draw the outline, when necessary
         if outline:
-            cv2.putText(canvas, s, pt, font_face, font_size, outline_color, font_width + outline_width, line_type)
+            cv2.putText(canvas, s, (pt[0],pt[1]), font_face, font_size, outline_color, font_width + outline_width, line_type)
 
         # draw the string
-        cv2.putText(canvas, s, pt, font_face, font_size, font_color[i] if isinstance(font_color, list) else font_color,
+        cv2.putText(canvas, s, (pt[0],pt[1]), font_face, font_size, font_color[i] if isinstance(font_color, list) else font_color,
                     font_width, line_type)
 
     # return the total width and height of the text block
