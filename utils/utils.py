@@ -210,22 +210,24 @@ def draw_progress_bar(step=0, total_steps=100, length=30, percentage=False):
     if step > total_steps:
         step = total_steps
     done = math.ceil(length * ((step+1) / total_steps))
-    left = length - done  
-    
+    left = length - done
+
     bar = "["
-     
+
     if step < (total_steps-1):
         bar += "".join(['=' for i in range(done)] + [">"] + ['.' for i in range(left)])
     else:
         bar += "".join(['=' for i in range(done+1)])
-        
+
     bar += "]"
-        
+
     if percentage:
         bar += " ({:.1f}%)".format( (step+1) / total_steps * 100 )
-    return bar  
+    return bar
 
-## --------------------------------------------------------------------------------------------------------------------------
+def show_progress_bar(message, step=0, total_steps=100, length=30, percentage=False):
+    print("{} {}".format(message, draw_progress_bar(step, total_steps, length=length, percentage=percentage)), end='\r', flush=True)
+
 ## --------------------------------------------------------------------------------------------------------------------------
 class Align(Enum):
     LEFT = 0
@@ -300,8 +302,7 @@ def draw_text(canvas, string, org=(0,0), align=Align.LEFT, valign=Valign.TOP, in
         br[1] = org[1] + max_height // 2
     elif valign == Valign.BOTTOM:
         tl[1] = org[1] - max_height
-        br[1] = org[1]
-        
+        br[1] = org[1]        
     
     if darken_background >= 0:
         darken_background = np.clip(darken_background, 0, 1)
