@@ -1,2 +1,2 @@
-# ML_Utilities
-Different utilities and functions for ML and CV purposes
+# Python Utilities
+Different utilities and functions for Python, Machine Learning and Computer Vision purposes
