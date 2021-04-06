@@ -361,10 +361,15 @@ def draw_text(canvas, string, org=(0,0), align=Align.LEFT, valign=Valign.TOP, in
     # list of dimensions
     dims_array = list()
 
+    once = True
     # iterate through strings to calculate the box dimensions
     for i, s in enumerate(string):
         dims, _ = cv2.getTextSize(s, font_face, font_size, font_width)
         dims_array.append(dims)
+        
+        if once:
+            #inner_pad += (dims[1] // 2)
+            once = False
 
         # calculate text block dimensions:
         if dims[0] > max_width:

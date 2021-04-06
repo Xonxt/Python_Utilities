@@ -66,6 +66,9 @@ def main():
 
         if key == KEY_ESC or is_key(key, 'Q', case_sensitive=False):
             break
+        
+        if key == KEY_SPACEBAR:
+            cv2.imwrite(f"image_{time.time()}.jpg", display_image)
 
 #-----------
 if __name__ == "__main__":
