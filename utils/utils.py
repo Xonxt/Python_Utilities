@@ -40,7 +40,10 @@ from utils.constants import *
 #----------------------
 
 # a few primary colors
-COLORS = [COLOR_GREEN, COLOR_RED, COLOR_BLUE, COLOR_PURPLE, COLOR_YELLOW, COLOR_CYAN, COLOR_WHITE, COLOR_GREY, COLOR_BLACK]
+COLORS = [COLOR_GREEN, COLOR_RED, COLOR_BLUE, COLOR_MAGENTA, COLOR_YELLOW, \
+          COLOR_CYAN, COLOR_GOLD, COLOR_MAROON, COLOR_PURPLE, COLOR_NAVY, \
+          COLOR_TEAL, COLOR_ORANGE, COLOR_OLIVE, COLOR_KHAKI, COLOR_FOREST, \
+          COLOR_WHITE, COLOR_GREY, COLOR_BLACK]
 
 # default color for drawing polygons and rectangles:
 DEFAULT_COLOR = COLOR_GREEN
@@ -361,15 +364,10 @@ def draw_text(canvas, string, org=(0,0), align=Align.LEFT, valign=Valign.TOP, in
     # list of dimensions
     dims_array = list()
 
-    once = True
     # iterate through strings to calculate the box dimensions
     for i, s in enumerate(string):
         dims, _ = cv2.getTextSize(s, font_face, font_size, font_width)
         dims_array.append(dims)
-        
-        if once:
-            #inner_pad += (dims[1] // 2)
-            once = False
 
         # calculate text block dimensions:
         if dims[0] > max_width:
