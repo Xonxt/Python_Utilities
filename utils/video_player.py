@@ -43,6 +43,8 @@ def play_video(path_to_video, video_name=None):
 
     # get window name for the video (if not given, use the file name with no extension)
     video_name = os.path.splitext(os.path.basename(path_to_video))[0] if video_name is None else video_name
+    
+    PAUSE = True
 
     cv2.namedWindow(video_name, cv2.WINDOW_AUTOSIZE)
 
@@ -53,7 +55,7 @@ def play_video(path_to_video, video_name=None):
             continue
 
         # resize the frame to a more uniform size (pad, if necessary)
-        frame_resized = resize_ratio(frame, (720, 1280), pad_value=0)[0]
+        frame_resized = resize_ratio(frame, (720, 1280), pad_value=0, center=True)[0]
         hi, wi = frame_resized.shape[:2]
         
         # add a seek-bar:
@@ -72,8 +74,10 @@ def play_video(path_to_video, video_name=None):
 
         cv2.imshow(video_name, frame_resized)
 
-        key = cv2.waitKey(1)
+        key = cv2.waitKey(int(not PAUSE))
         if key == KEY_ESC:
             break
+        if key == KEY_SPACEBAR:
+            PAUSE = not PAUSE
 
     cv2.destroyWindow(video_name)

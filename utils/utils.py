@@ -68,7 +68,7 @@ def rect_area(rect):
     return abs(rect[2]-rect[0]) * abs(rect[3]-rect[1])
 
 # ----------------------
-def resize_ratio(image, shape=(368,368), padding=True, pad_value=128, upscale=True, interpolation=cv2.INTER_CUBIC):
+def resize_ratio(image, shape=(368,368), padding=True, pad_value=128, upscale=True, interpolation=cv2.INTER_CUBIC, center=False):
     """
     Resizes an input image while keeping the aspect ratio
 
@@ -95,6 +95,10 @@ def resize_ratio(image, shape=(368,368), padding=True, pad_value=128, upscale=Tr
     if padding:
         resized_image = np.ones(tuple(shape) + image.shape[2:], dtype=image.dtype) * pad_value
         resized_image[:dim[0],:dim[1]] = cv2.resize(image, tuple(dim[::-1]), interpolation=interpolation)
+
+        if center:
+            pad_y, pad_x = resized_image.shape[0] - dim[0], resized_image.shape[1] - dim[1]          
+            resized_image[:] = cv2.warpAffine(resized_image, np.float32([[1,0,pad_x/2],[0,1,pad_y/2]]), resized_image.shape[:2][::-1])
     else:
         resized_image = cv2.resize(image, tuple(dim[::-1]), interpolation=interpolation)
 
