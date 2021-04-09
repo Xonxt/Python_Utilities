@@ -28,6 +28,9 @@ def play_video(path_to_video, video_name=None):
 
     if not os.path.exists(path_to_video):
         return
+    
+    if os.path.splitext(path_to_video)[-1] not in vid_formats:
+        return
 
     cap = cv2.VideoCapture(path_to_video)
     if not cap.isOpened():
@@ -43,7 +46,7 @@ def play_video(path_to_video, video_name=None):
 
     cv2.namedWindow(video_name, cv2.WINDOW_AUTOSIZE)
 
-    for i in range(1500,frame_count):
+    for i in range(frame_count):
         ret, frame = cap.read()
 
         if not ret or not is_valid_image(frame):
